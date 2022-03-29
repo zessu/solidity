@@ -7,7 +7,7 @@ contract Will {
     uint amount;
     bool deceased;
 
-    constructor() payable {
+    constructor() payable public {
         owner = msg.sender;
         amount = msg.value;
         deceased = false;
@@ -27,7 +27,7 @@ contract Will {
 
    mapping(address => uint) familyMap;
 
-   function setInheritance(address payable walletAddress, uint amt) public {
+   function setInheritance (address payable walletAddress, uint amt) isOwner public {
        familyWallets.push(walletAddress);
        familyMap[walletAddress] = amt;
    }
@@ -39,4 +39,9 @@ contract Will {
         }
     }
 
+    // called by some kind of oracle or managed address owner
+    function ownerDeceased() isOwner public {
+        deceased = true;
+        payout();
+    }
 }
